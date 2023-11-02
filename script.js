@@ -43,8 +43,18 @@ function getComputerChoice(){
 function compareChoice(userChoice, computerChoice){
     if (userChoice === computerChoice){
         alert("It's a draw!");
-    } else if =
+    } else if ((userChoice === "rock" && computerChoice === "scissors") || 
+    (userChoice === "paper" && computerChoice==="rock") || 
+    (userchoice === "scissors"&& computerChoice === "paper")
+    ){
+        alert("you win the round");
+        userScore++;
+    } else {
+        alert("point to the machine!");
+        computerScore++;
+    }
 }
+    
 //use nested if else to test user vs computer
 
 //output alert messages for each outcome - ex: "user chose paper. computer chose rock. paper covers rock! player wins"
@@ -57,6 +67,14 @@ function compareChoice(userChoice, computerChoice){
 //function playGame
  function playGame(){
     let round = 1
+    while(computerScore < 2 && userScore < 2){
+        alert('Round ${round}\nUser: ${userScore} Computer: ${computerScore}');
+            let userChoice = getUserChoice();
+            let computerChoice = getComputerChoice();
+            compareChoice(userChoice,computerChoice);
+            round++;
+
+    }
  }
 
 //counts round number
