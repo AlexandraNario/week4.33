@@ -1,72 +1,88 @@
-
-//rock paper scissors
-//global variables
-
+//New Requirements: 
+//In our UI, the player should be able to play the game by clicking on buttons rather than typing their answer in a prompt.
+//Create three buttons, one for each selection. Add an event listener to the buttons that call your playRound function with the correct playerSelection every time a button is clicked. (you can keep the console.logs for this step)
+//Add a div for displaying results and change all of your console.logs into DOM methods.
+//Display the running score, and announce a winner of the game once one player reaches 3 points
+//You will likely have to refactor (rework/rewrite) your original code to make it work for this.
 let computerScore = 0;
 let userScore = 0;
+//id the buttons and result div
+let rockButton = document.getElementById("rock");
+let paperButton = document.getElementById("paper");
+let scissorsButton = document.getElementById("scissors");
+let resultDiv = document.getElementById("result");
+let scoreDiv = document.getElementById("score");
+//add event listeners to the buttons that call playRound with the correct playerSelection
 
-function getUserChoice() {
-  let userChoice = prompt("Enter your choice: rock, paper, or scissors");
-  return userChoice;
-}
- 
+rockButton.addEventListener("click", function() {
+  playRound("rock");
+});
+paperButton.addEventListener("click", function() {
+  playRound("paper");
+});
+scissorsButton.addEventListener("click", function() {
+  playRound("scissors");
+});
 
-//function getUserChoice
-//use prompt to ask user to enter their choice for rock paper or scissors
-//return users choice
+
+//move the function that randomly decides computers choice up as that is not changing
 function getComputerChoice() {
   let choices = ["rock", "paper", "scissors"];
   let randomIndex = Math.floor(Math.random() * choices.length);
   return choices[randomIndex];
 }
-//function getComputerChoice
-//uses Math.random to pick rock, paper or scissors at random from an array 
-//returns computer's choice
-function compareChoice(userChoice, computerChoice) {
-  if (userChoice === computerChoice) {
-    alert("It's a tie!");
-  } else if (
+//rework userchoice and userscore
+
+//compare the choices and return the winner and update scores
+function playRound(userChoice) {
+  let computerChoice = getComputerChoice();
+  let result = determineWinner(userChoice, computerChoice);
+if (result === 'user'){
+  userScore++;
+
+  resultDiv.innerHTML = `You Win! You chose ${userChoice}.<br>The machine chose ${computerChoice}.<br>`;
+} else if (result === 'computer') {
+  computerScore++;
+  resultDiv.innerHTML = `You Lose!The machine chose ${computerChoice}.<br>You chose ${userChoice}.<br>`;
+} else {
+  resultDiv.innerHTML = `It's a tie! You both chose ${userChoice}.`;
+}
+  updateScore();
+  checkWinner();
+
+}
+
+function determineWinner(userChoice, computerChoice) {
+  if (
     (userChoice === "rock" && computerChoice === "scissors") ||
     (userChoice === "paper" && computerChoice === "rock") ||
     (userChoice === "scissors" && computerChoice === "paper")
   ) {
-    alert("You win this round!");
-    userScore++;
+    return "user";
+  } else if (userChoice === computerChoice){
+    return 'tie';
+    
   } else {
-    alert("the machine wins this round!");
-    computerScore++;
+    return 'computer';
   }
 }
-
-//function compareChoice
-//takes in userChoice and computerChoice as arguments
-//use nested if else to test user vs computer
-//output alert messages for each outcome - ex: "user chose paper. computer chose rock. paper covers rock! player wins"
-//increments the winners score
-
-function playGame() {
-  let round = 1;
-  while (computerScore < 2 && userScore < 2) {
-    alert(`Round ${round}\nUser: ${userScore}  Computer: ${computerScore}`);
-    let userChoice = getUserChoice();
-    let computerChoice = getComputerChoice();
-    compareChoice(userChoice, computerChoice);
-    round++;
-  }
-
-  if (userScore > computerScore) {
-    alert("Congratulations! You win the game!");
-  } else {
-    alert("Sorry, the machine wins the game!");
-  }
+function updateScore() {
+  scoreDiv.innerHTML = `Score: User: ${userScore} Computer: ${computerScore}`;
 }
 
-playGame();
+function checkWinner() {
+  if (userScore === 3) {
+    resultDiv.textContent = 'Congratulations! You won the game!';
+    resetGame();
+    } else if (computerScore === 3) {
+    resultDiv.textContent = 'Oops! Machine won the game. Better luck next time!';
+    resetGame();
+    }
+}//added curly brackets to close the if statement
 
-//function playGame
-//counts round number
-//run a while loop as long as computer and user's score are < 2(best 2/3)
-//inside the while loop:
-  //increment round counter
-  //give an alert with the round # and user and computer's current scores
-  //run compare choice, passing it user's choice and computer's choice.
+function resetGame() {
+  userScore = 0;
+  computerScore = 0;
+   updateScore();
+
+}
